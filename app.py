@@ -2,20 +2,24 @@ from flask import Flask, render_template, request
 import pickle
 import numpy as np
 import sqlite3
+import os
 
 app = Flask(__name__)
 
 # -----------------------------
-# Load ML Model
+# Load ML Model (Safe Path)
 # -----------------------------
-data = pickle.load(open("model.pkl", "rb"))
+model_path = os.path.join(os.getcwd(), "model.pkl")
+data = pickle.load(open(model_path, "rb"))
 model = data["model"]
 
 # -----------------------------
-# Create Database
+# Database Path (Important for Render)
 # -----------------------------
+db_path = os.path.join(os.getcwd(), "predictions.db")
+
 def init_db():
-    conn = sqlite3.connect("predictions.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS predictions (
@@ -50,7 +54,7 @@ def predict():
     price = model.predict(features)[0]
 
     # Save to database
-    conn = sqlite3.connect("predictions.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO predictions (sqft, bedrooms, bathrooms, price)
@@ -64,7 +68,7 @@ def predict():
 
 @app.route("/history")
 def history():
-    conn = sqlite3.connect("predictions.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
     rows = cursor.fetchall()
@@ -74,4 +78,4 @@ def history():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
