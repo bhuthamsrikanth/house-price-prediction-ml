@@ -39,6 +39,7 @@ init_db()
 def home():
     return render_template("index.html")
 
+
 @app.route("/predict", methods=["POST"])
 def predict():
     sqft = float(request.form["sqft"])
@@ -60,6 +61,7 @@ def predict():
 
     return render_template("index.html", prediction=round(price, 2))
 
+
 @app.route("/history")
 def history():
     conn = sqlite3.connect("predictions.db")
@@ -70,5 +72,6 @@ def history():
 
     return render_template("history.html", rows=rows)
 
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

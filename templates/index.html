@@ -3,104 +3,108 @@
 <head>
     <title>House Price Prediction</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
         body {
-            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #f4f6f9;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(-45deg, #ff6a00, #ee0979, #00c6ff, #0072ff);
-            background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
+            height: 100vh;
         }
 
-        @keyframes gradientBG {
-            0% {background-position: 0% 50%;}
-            50% {background-position: 100% 50%;}
-            100% {background-position: 0% 50%;}
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(15px);
+        .card {
+            background: white;
             padding: 40px;
-            border-radius: 20px;
             width: 420px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
 
         h1 {
-            margin-bottom: 25px;
-            font-size: 26px;
-            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #1f2937;
         }
 
         input {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
-            border-radius: 10px;
-            border: none;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+        }
+
+        input:focus {
             outline: none;
+            border-color: #2563eb;
         }
 
         button {
             width: 100%;
             padding: 12px;
             margin-top: 15px;
-            border-radius: 10px;
+            background: #2563eb;
+            color: white;
             border: none;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: 500;
-            background: white;
-            color: #333;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
         }
 
         button:hover {
-            transform: scale(1.05);
-            background: #f1f1f1;
+            background: #1e40af;
         }
 
         .result {
             margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #00ffcc;
+            text-align: center;
+            font-weight: 600;
+            color: #16a34a;
+        }
+
+        .history-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .history-link a {
+            text-decoration: none;
+            color: #2563eb;
+            font-size: 14px;
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>🏠 AI House Price Predictor</h1>
+<div class="card">
+    <h1>🏠 House Price Predictor</h1>
 
-    <form method="POST">
-        <input type="number" name="area" placeholder="Area (sqft)" required>
+    <form action="/predict" method="POST">
+        <input type="number" name="sqft" placeholder="Square Feet" required>
         <input type="number" name="bedrooms" placeholder="Bedrooms" required>
         <input type="number" name="bathrooms" placeholder="Bathrooms" required>
-        <button type="submit">🚀 Predict Price</button>
+        <button type="submit">Predict Price</button>
     </form>
 
-    {% if prediction_text %}
+    {% if prediction %}
     <div class="result">
-        {{ prediction_text }}
+        Predicted Price: ₹ {{ prediction }}
     </div>
     {% endif %}
+
+    <div class="history-link">
+        <a href="/history">View Prediction History</a>
+    </div>
 </div>
 
 </body>
