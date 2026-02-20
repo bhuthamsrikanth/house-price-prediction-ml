@@ -41,13 +41,7 @@ init_db()
 
 @app.route("/")
 def home():
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
-    rows = cursor.fetchall()
-    conn.close()
-
-    return render_template("index.html", rows=rows)
+    return render_template("index.html")
 
 
 @app.route("/predict", methods=["POST"])
@@ -68,15 +62,20 @@ def predict():
     """, (sqft, bedrooms, bathrooms, price))
 
     conn.commit()
-
-    cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
-    rows = cursor.fetchall()
-
     conn.close()
 
-    return render_template("index.html",
-                           prediction=round(price, 2),
-                           rows=rows)
+    return render_template("index.html", prediction=round(price, 2))
+
+
+@app.route("/history")
+def history():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
+    rows = cursor.fetchall()
+    conn.close()
+
+    return render_template("history.html", rows=rows)
 
 
 if __name__ == "__main__":
