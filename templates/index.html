@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>USA House Price Prediction</title>
+    <title>House Price Prediction</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -14,7 +14,7 @@
         }
 
         body {
-            height: 100vh;
+            min-height: 100vh;
             background: 
                 linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
                 url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c");
@@ -23,13 +23,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
         .container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
-            padding: 40px;
-            width: 420px;
+            padding: 35px;
+            width: 450px;
             border-radius: 15px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             color: white;
@@ -37,7 +38,7 @@
 
         h1 {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: 600;
         }
 
@@ -70,11 +71,36 @@
         }
 
         .result {
-            margin-top: 20px;
+            margin-top: 18px;
             font-size: 18px;
             font-weight: bold;
             color: #00ffcc;
             text-align: center;
+        }
+
+        .history {
+            margin-top: 25px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 6px;
+            text-align: center;
+        }
+
+        th {
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.1);
         }
 
         .footer {
@@ -89,7 +115,7 @@
 <body>
 
 <div class="container">
-    <h1>🏠 USA House Price Prediction</h1>
+    <h1>🏠 House Price Prediction</h1>
 
     <form action="/predict" method="POST">
         <input type="number" name="sqft" placeholder="Square Feet" required>
@@ -103,6 +129,30 @@
         Predicted Price: $ {{ prediction }}
     </div>
     {% endif %}
+
+    {% if rows %}
+    <div class="history">
+        <h3 style="text-align:center; margin-bottom:10px;">Recent Predictions</h3>
+        <table>
+            <tr>
+                <th>Sqft</th>
+                <th>Bed</th>
+                <th>Bath</th>
+                <th>Price</th>
+            </tr>
+
+            {% for row in rows %}
+            <tr>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>${{ "%.0f"|format(row[4]) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
 </div>
 
 <div class="footer">
