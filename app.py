@@ -1,3 +1,40 @@
+from flask import Flask, render_template, request
+import pickle
+import numpy as np
+import sqlite3
+import os
+
+app = Flask(__name__)
+
+# -----------------------------
+# Load ML Model
+# -----------------------------
+model_path = os.path.join(os.getcwd(), "model.pkl")
+data = pickle.load(open(model_path, "rb"))
+model = data["model"]
+
+# -----------------------------
+# Database Setup
+# -----------------------------
+db_path = os.path.join(os.getcwd(), "predictions.db")
+
+def init_db():
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS predictions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sqft REAL,
+            bedrooms REAL,
+            bathrooms REAL,
+            price REAL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db()
+
 # -----------------------------
 # Routes
 # -----------------------------
@@ -6,7 +43,7 @@
 def home():
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM predictions ORDER BY id DESC LIMIT 5")
+    cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
     rows = cursor.fetchall()
     conn.close()
 
@@ -22,20 +59,25 @@ def predict():
     features = np.array([[sqft, bedrooms, bathrooms]])
     price = model.predict(features)[0]
 
-    # Save to database
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+
     cursor.execute("""
         INSERT INTO predictions (sqft, bedrooms, bathrooms, price)
         VALUES (?, ?, ?, ?)
     """, (sqft, bedrooms, bathrooms, price))
+
     conn.commit()
 
-    # Fetch latest 5 records
-    cursor.execute("SELECT * FROM predictions ORDER BY id DESC LIMIT 5")
+    cursor.execute("SELECT * FROM predictions ORDER BY id DESC")
     rows = cursor.fetchall()
+
     conn.close()
 
     return render_template("index.html",
                            prediction=round(price, 2),
                            rows=rows)
+
+
+if __name__ == "__main__":
+    app.run()
