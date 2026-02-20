@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # -----------------------------
-# Load ML Model
+# Load Model
 # -----------------------------
 model_path = os.path.join(os.getcwd(), "model.pkl")
 data = pickle.load(open(model_path, "rb"))

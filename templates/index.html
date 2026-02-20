@@ -6,10 +6,12 @@
 
     <style>
         body {
-            min-height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
                         url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c");
             background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -18,50 +20,70 @@
 
         .container {
             background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(12px);
-            padding: 35px;
-            width: 450px;
-            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            width: 420px;
+            border-radius: 20px;
             text-align: center;
             color: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            margin-bottom: 25px;
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
+            padding: 14px;
+            margin: 12px 0;
+            border-radius: 10px;
             border: none;
+            font-size: 14px;
         }
 
         button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-top: 10px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: none;
-            background: #2563eb;
-            color: white;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
+            transition: 0.3s;
         }
 
-        button:hover {
-            background: #1e40af;
+        .predict-btn {
+            background: linear-gradient(to right, #2563eb, #1e40af);
+            color: white;
         }
 
-        .result {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #00ffcc;
+        .predict-btn:hover {
+            transform: scale(1.03);
         }
 
         .history-btn {
-            background: #10b981;
+            background: linear-gradient(to right, #10b981, #047857);
+            color: white;
             margin-top: 15px;
         }
 
         .history-btn:hover {
-            background: #059669;
+            transform: scale(1.03);
+        }
+
+        .result {
+            margin-top: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00ffcc;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 13px;
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -75,7 +97,7 @@
         <input type="number" name="sqft" placeholder="Square Feet" required>
         <input type="number" name="bedrooms" placeholder="Bedrooms" required>
         <input type="number" name="bathrooms" placeholder="Bathrooms" required>
-        <button type="submit">Predict Price</button>
+        <button type="submit" class="predict-btn">Predict Price</button>
     </form>
 
     {% if prediction %}
@@ -86,10 +108,13 @@
 
     <form action="/history">
         <button type="submit" class="history-btn">
-            View Prediction History
+            📊 View Prediction History
         </button>
     </form>
 
+    <div class="footer">
+        Developed by Srikanth
+    </div>
 </div>
 
 </body>
